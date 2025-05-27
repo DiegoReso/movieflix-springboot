@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +27,9 @@ public class StreamingService {
 
     public Optional<Streaming> findById(Long id){
         return repository.findById(id);
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }
