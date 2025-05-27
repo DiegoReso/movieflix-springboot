@@ -7,7 +7,6 @@ import br.com.movieflix.entity.Category;
 import br.com.movieflix.mapper.CategoryMapper;
 import br.com.movieflix.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,14 +17,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    @Autowired
-    private final CategoryService service;
 
+    private final CategoryService service;
 
     @GetMapping
     public List<CategoryResponse> getAllCategories(){
         List<Category> list = service.findAll();
-        return list.stream().map(CategoryMapper::toCategoryRespose).toList();
+        return list.stream()
+                .map(CategoryMapper::toCategoryRespose)
+                .toList();
     }
 
     @PostMapping
@@ -35,13 +35,11 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id){
+    public CategoryResponse getCategoryById(@PathVariable Long id){
         Optional<Category> optCategory = service.getCategoryById(id);
-        if(optCategory.isPresent()){
-            return optCategory.get();
-        }
+        return optCategory.map(CategoryMapper::toCategoryRespose)
+                .orElse(null);
 
-        return null;
     }
 
     @DeleteMapping("/{id}")
