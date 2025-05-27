@@ -7,6 +7,8 @@ import br.com.movieflix.entity.Category;
 import br.com.movieflix.mapper.CategoryMapper;
 import br.com.movieflix.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,30 +23,33 @@ public class CategoryController {
     private final CategoryService service;
 
     @GetMapping
-    public List<CategoryResponse> getAllCategories(){
-        List<Category> list = service.findAll();
-        return list.stream()
-                .map(CategoryMapper::toCategoryRespose)
-                .toList();
+    public ResponseEntity<List<CategoryResponse>>  getAllCategories(){
+        List<CategoryResponse> categoryResponseList = service.findAll()
+                .stream().map(CategoryMapper::toCategoryRespose).toList();
+
+        return ResponseEntity.ok(categoryResponseList);
     }
 
     @PostMapping
-    public CategoryResponse insert(@RequestBody CategoryRequest categoryRequest){
-        Category category = service.insert(CategoryMapper.toCategory(categoryRequest));
-        return CategoryMapper.toCategoryRespose(category);
+    public ResponseEntity<CategoryResponse>  insert(@RequestBody CategoryRequest categoryRequest){
+        CategoryResponse categoryResponse =
+                CategoryMapper.toCategoryRespose(service.insert(CategoryMapper.toCategory(categoryRequest)));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
     }
 
     @GetMapping("/{id}")
-    public CategoryResponse getCategoryById(@PathVariable Long id){
-        Optional<Category> optCategory = service.getCategoryById(id);
-        return optCategory.map(CategoryMapper::toCategoryRespose)
-                .orElse(null);
+    public ResponseEntity<CategoryResponse>  getCategoryById(@PathVariable Long id){
+        return service.getCategoryById(id)
+                .map(category -> ResponseEntity.ok(CategoryMapper.toCategoryRespose(category)))
+                .orElse(ResponseEntity.notFound().build());
 
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id){
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
