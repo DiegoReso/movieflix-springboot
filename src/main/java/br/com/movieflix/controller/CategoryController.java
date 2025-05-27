@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/movieflix/category")
@@ -19,13 +20,22 @@ public class CategoryController {
 
     @GetMapping
     public List<Category> getAllCategories(){
-        List<Category> list = service.findAll();
-        return list;
+        return service.findAll();
     }
 
     @PostMapping
     public Category insert(@RequestBody Category category){
         return service.insert(category);
+    }
+
+    @GetMapping("/{id}")
+    public Category getCategoryById(@PathVariable Long id){
+        Optional<Category> optCategory = service.getCategoryById(id);
+        if(optCategory.isPresent()){
+            return optCategory.get();
+        }
+
+        return null;
     }
 
 }

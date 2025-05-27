@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,5 +21,9 @@ public class CategoryService {
 
     public Category insert(Category category) {
         return repository.save(category);
+    }
+
+    public Optional<Category> getCategoryById(Long id) {
+        return repository.findById(id);
     }
 }
