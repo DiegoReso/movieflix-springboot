@@ -3,6 +3,7 @@ package br.com.movieflix.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
