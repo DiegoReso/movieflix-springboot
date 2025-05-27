@@ -35,5 +35,10 @@ public class StreamingController {
         return ResponseEntity.ok(streaming);
     }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<StreamingResponse> findStreamingById(@PathVariable Long id){
+        return service.findById(id)
+                .map(streaming -> ResponseEntity.ok(StreamingMapper.toStreamingResponse(streaming)))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
