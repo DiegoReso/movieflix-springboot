@@ -1,4 +1,9 @@
-CREATE TABLE streaming(
+CREATE TABLE movie(
     id serial PRIMARY KEY,
-    name varchar(100) NOT NULL
+    title varchar(255) NOT NULL,
+    description text,
+    release_date date,
+    rating numeric,
+    created_at timestamp,
+    updated_at timestamp
 );
