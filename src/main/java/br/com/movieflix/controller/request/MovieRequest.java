@@ -8,6 +8,6 @@ public record MovieRequest(String title,
                            LocalDate releaseDate,
                            double rating,
                            List<Long> categories,
-                           List<Long> streaming
+                           List<Long> streamings
                            ) {
 }
