@@ -17,6 +17,7 @@ public class MovieService {
 
     private final MovieRepository repository;
     private final CategoryService categoryService;
+    private final StreamingService streamingService;
 
     public List<Movie> findAll() {
         return repository.findAll();
@@ -24,6 +25,7 @@ public class MovieService {
 
     public Movie insert(Movie movie){
         movie.setCategories(findCategories(movie.getCategories()));
+        movie.setStreamings(findStreaming(movie.getStreamings()));
         return repository.save(movie);
     }
 
@@ -42,4 +44,10 @@ public class MovieService {
         return categoriesFound;
     }
 
+    private List<Streaming> findStreaming(List<Streaming> streamings){
+        List<Streaming> streamingsFound = new ArrayList<>();
+        streamings.forEach(streaming -> streamingService.findById(streaming.getId()).ifPresent(streamingsFound::add));
+
+        return streamingsFound;
+    }
 }
