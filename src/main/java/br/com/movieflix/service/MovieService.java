@@ -12,14 +12,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovieService {
 
-    private MovieRepository repository;
+    private final MovieRepository repository;
 
     public List<Movie> findAll() {
         return repository.findAll();
     }
 
-    public Movie insertMovie(Movie streaming){
-        return repository.save(streaming);
+    public Movie insert(Movie movie){
+        return repository.save(movie);
     }
 
     public Optional<Movie> findById(Long id){
