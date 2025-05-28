@@ -37,6 +37,7 @@ public class MovieMapper {
                 .title(movieRequest.title())
                 .description(movieRequest.description())
                 .releaseDate(movieRequest.releaseDate())
+                .rating(movieRequest.rating())
                 .categories(categories)
                 .streamings(streamings)
                 .build();
