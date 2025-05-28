@@ -23,6 +23,10 @@ public class MovieService {
         return repository.findAll();
     }
 
+    public List<Movie> findByCategory(Long categoryId){
+        return repository.findMovieByCategories(List.of(Category.builder().id(categoryId).build()));
+    }
+
     public Movie insert(Movie movie){
         movie.setCategories(findCategories(movie.getCategories()));
         movie.setStreamings(findStreaming(movie.getStreamings()));
