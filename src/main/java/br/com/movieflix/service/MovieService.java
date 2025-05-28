@@ -1,10 +1,13 @@
 package br.com.movieflix.service;
 
+import br.com.movieflix.entity.Category;
 import br.com.movieflix.entity.Movie;
+import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +16,14 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository repository;
+    private final CategoryService categoryService;
 
     public List<Movie> findAll() {
         return repository.findAll();
     }
 
     public Movie insert(Movie movie){
+        movie.setCategories(findCategories(movie.getCategories()));
         return repository.save(movie);
     }
 
@@ -28,6 +33,13 @@ public class MovieService {
 
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    private List<Category> findCategories(List<Category> categories){
+        List<Category> categoriesFound = new ArrayList<>();
+        categories.forEach(category -> categoryService.getCategoryById(category.getId()).ifPresent(categoriesFound::add));
+
+        return categoriesFound;
     }
 
 }
