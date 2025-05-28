@@ -6,6 +6,7 @@ import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.mapper.StreamingMapper;
 import br.com.movieflix.service.StreamingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class StreamingController {
     public ResponseEntity<StreamingResponse> insertStreaming(@RequestBody StreamingRequest streamingRequest){
         StreamingResponse streaming = StreamingMapper.toStreamingResponse(service.insertStreaming(StreamingMapper.toStreaming(streamingRequest)));
 
-        return ResponseEntity.ok(streaming);
+        return ResponseEntity.status(HttpStatus.CREATED).body(streaming);
     }
 
     @GetMapping("/{id}")
