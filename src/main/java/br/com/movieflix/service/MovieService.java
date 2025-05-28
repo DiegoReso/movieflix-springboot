@@ -53,6 +53,7 @@ public class MovieService {
             movie.setTitle(updateMovie.getTitle());
             movie.setDescription(updateMovie.getDescription());
             movie.setRating(updateMovie.getRating());
+
             movie.getCategories().clear();
             movie.getCategories().addAll(categories);
 
