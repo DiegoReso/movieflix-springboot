@@ -6,6 +6,11 @@ import br.com.movieflix.controller.response.MovieResponse;
 import br.com.movieflix.entity.Movie;
 import br.com.movieflix.mapper.MovieMapper;
 import br.com.movieflix.service.MovieService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +25,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/movieflix/movie")
 @RequiredArgsConstructor
+@Tag(name = "Filmes", description = "Endpoints para gerenciamento de filmes")
 public class MovieController {
 
     private final MovieService service;
 
+    @Operation(summary = "Inserir um novo filme", description = "Endpoint para inserir um novo filme no sistema")
+    @ApiResponse(responseCode = "201", description = "Filme inserido com sucesso",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class))
+    )
     @PostMapping
     public ResponseEntity<MovieResponse> insert(@Valid @RequestBody MovieRequest movieRequest){
         Movie movie = service.insert(MovieMapper.toMovie(movieRequest));
