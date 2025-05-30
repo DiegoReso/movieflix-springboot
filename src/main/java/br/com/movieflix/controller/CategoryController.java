@@ -6,6 +6,7 @@ import br.com.movieflix.controller.response.CategoryResponse;
 import br.com.movieflix.entity.Category;
 import br.com.movieflix.mapper.CategoryMapper;
 import br.com.movieflix.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,9 +42,11 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse>  getCategoryById(@PathVariable Long id){
-        return service.getCategoryById(id)
-                .map(category -> ResponseEntity.ok(CategoryMapper.toCategoryRespose(category)))
-                .orElse(ResponseEntity.notFound().build());
+
+
+            return service.getCategoryById(id)
+                    .map(category -> ResponseEntity.ok(CategoryMapper.toCategoryRespose(category)))
+                    .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o id: " + id));
 
     }
 
