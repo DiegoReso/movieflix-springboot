@@ -2,9 +2,9 @@ package br.com.movieflix.controller;
 
 import br.com.movieflix.controller.request.StreamingRequest;
 import br.com.movieflix.controller.response.StreamingResponse;
-import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.mapper.StreamingMapper;
 import br.com.movieflix.service.StreamingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class StreamingController {
     }
 
     @PostMapping
-    public ResponseEntity<StreamingResponse> insertStreaming(@RequestBody StreamingRequest streamingRequest){
+    public ResponseEntity<StreamingResponse> insertStreaming(@Valid  @RequestBody StreamingRequest streamingRequest){
         StreamingResponse streaming = StreamingMapper.toStreamingResponse(service.insertStreaming(StreamingMapper.toStreaming(streamingRequest)));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(streaming);
