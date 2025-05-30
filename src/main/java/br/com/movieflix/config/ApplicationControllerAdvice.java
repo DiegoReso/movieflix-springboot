@@ -1,6 +1,7 @@
 package br.com.movieflix.config;
 
 import br.com.movieflix.exception.UsernameOrPasswordInvalidException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,5 +31,11 @@ public class ApplicationControllerAdvice {
       );
 
       return errors;
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleEntityNotFoundException(EntityNotFoundException e) {
+    return e.getMessage();
     }
 }
