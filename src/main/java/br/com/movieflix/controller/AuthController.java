@@ -9,6 +9,7 @@ import br.com.movieflix.entity.User;
 import br.com.movieflix.exception.UsernameOrPasswordInvalidException;
 import br.com.movieflix.mapper.UserMapper;
 import br.com.movieflix.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse>  register(@RequestBody UserRequest request){
+    public ResponseEntity<UserResponse>  register(@Valid @RequestBody UserRequest request){
         UserResponse userResponse = UserMapper.toUserResponse(service.save(UserMapper.toUser(request)));
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
 
         try{
             UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.email(),
