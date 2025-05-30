@@ -36,9 +36,9 @@ public class SecutiryFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                 filterChain.doFilter(request, response);
-            } else {
-                filterChain.doFilter(request, response);
             }
+        }else{
+            filterChain.doFilter(request, response);
         }
     }
 }
