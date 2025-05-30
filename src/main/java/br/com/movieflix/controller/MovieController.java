@@ -7,6 +7,7 @@ import br.com.movieflix.entity.Movie;
 import br.com.movieflix.mapper.MovieMapper;
 import br.com.movieflix.service.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,6 +42,10 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.CREATED).body(movieResponse);
     }
 
+    @Operation(summary = "Buscar todos os filmes", description = "Endpoint para buscar todos os filmes cadastrados")
+    @ApiResponse(responseCode = "200", description = "Lista de filmes retornada com sucesso",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
+    )
     @GetMapping
     public ResponseEntity<List<MovieResponse>> findAll(){
         List<Movie> movies = service.findAll();
