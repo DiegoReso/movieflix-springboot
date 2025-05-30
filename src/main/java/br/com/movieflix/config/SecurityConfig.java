@@ -12,11 +12,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final SecutiryFilter secutiryFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -28,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/movieflix/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .addFilter()
+                .addFilterBefore(secutiryFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
