@@ -55,6 +55,14 @@ public class MovieController {
         return ResponseEntity.ok().body(movieResponses);
     }
 
+    @Operation(summary = "Buscar filme por ID", description = "Endpoint para buscar um filme específico pelo ID")
+    @ApiResponse(responseCode = "200", description = "Filme encontrado com sucesso",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Filme não encontrado",
+            content = @Content(schema = @Schema(type = "string"))
+    )
+
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> findById(@PathVariable Long id){
         return service.findById(id)
@@ -62,16 +70,30 @@ public class MovieController {
                 .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
     }
 
+
+    @Operation(summary = "Deletar filme por ID", description = "Endpoint para deletar um filme específico pelo ID")
+    @ApiResponse(responseCode = "204", description = "Filme deletado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Filme não encontrado",
+            content = @Content(schema = @Schema(type = "string"))
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id){
-        Optional<Movie> optionalMovie = service.findById(id);
-        if(optionalMovie.isPresent()){
-            service.delete(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> deleteById(@PathVariable Long id){
+        return service.findById(id)
+                .map(movie -> {
+                    service.delete(movie.getId());
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
+
     }
 
+    @Operation (summary = "Atualizar filme por ID", description = "Endpoint para atualizar um filme específico pelo ID")
+    @ApiResponse(responseCode = "200", description = "Filme atualizado com sucesso",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Filme não encontrado",
+            content = @Content(schema = @Schema(type = "string"))
+    )
     @PutMapping("/{id}")
     public ResponseEntity<MovieResponse> update(@Valid @RequestBody MovieRequest movieRequest, @PathVariable Long id){
         return service.update(MovieMapper.toMovie(movieRequest), id)
@@ -79,6 +101,13 @@ public class MovieController {
                 .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
     }
 
+    @Operation (summary = "Buscar filmes por categoria", description = "Endpoint para buscar filmes filtrados por categoria")
+    @ApiResponse(responseCode = "200", description = "Lista de filmes filtrados por categoria retornada com sucesso",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
+    )
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada",
+            content = @Content(schema = @Schema(type = "string"))
+    )
     @GetMapping("/search")
     public ResponseEntity<List<MovieResponse>> getMovieParam(@RequestParam Long category){
         return ResponseEntity.ok(service.findByCategory(category).stream()
