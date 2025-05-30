@@ -6,12 +6,14 @@ import br.com.movieflix.controller.response.MovieResponse;
 import br.com.movieflix.entity.Movie;
 import br.com.movieflix.mapper.MovieMapper;
 import br.com.movieflix.service.MovieService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.channels.NotYetBoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +44,7 @@ public class MovieController {
     public ResponseEntity<MovieResponse> findById(@PathVariable Long id){
         return service.findById(id)
                 .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
     }
 
     @DeleteMapping("/{id}")
@@ -59,7 +61,7 @@ public class MovieController {
     public ResponseEntity<MovieResponse> update(@Valid @RequestBody MovieRequest movieRequest, @PathVariable Long id){
         return service.update(MovieMapper.toMovie(movieRequest), id)
                 .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new EntityNotFoundException("Filme não encontrado com o id: " + id));
     }
 
     @GetMapping("/search")
