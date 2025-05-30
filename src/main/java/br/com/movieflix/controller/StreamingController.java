@@ -4,6 +4,7 @@ import br.com.movieflix.controller.request.StreamingRequest;
 import br.com.movieflix.controller.response.StreamingResponse;
 import br.com.movieflix.mapper.StreamingMapper;
 import br.com.movieflix.service.StreamingService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class StreamingController {
     public ResponseEntity<StreamingResponse> findStreamingById(@PathVariable Long id){
         return service.findById(id)
                 .map(streaming -> ResponseEntity.ok(StreamingMapper.toStreamingResponse(streaming)))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new EntityNotFoundException("Streaming não encontrado com o id: " + id));
     }
 
     @DeleteMapping("/{id}")
