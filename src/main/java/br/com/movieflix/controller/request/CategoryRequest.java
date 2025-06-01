@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record CategoryRequest(
         @Schema(
-                description = "ID da categoria",
-                example = "1",
-                type = "Long"
+                description = "Nome da categoria",
+                example = "Romance",
+                type = "String"
         )
         @NotEmpty(message = "Nome da categoria obrigatório.") String name) {
 }
