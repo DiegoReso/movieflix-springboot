@@ -63,7 +63,7 @@ public class StreamingController {
                 .orElseThrow(() -> new EntityNotFoundException("Streaming não encontrado com o id: " + id));
     }
 
-    @Operation (summary = "Atualizar uma streaming", description = "Endpoint para atualizar uma streaming existente")
+    @Operation (summary = "Deletar uma streaming", description = "Endpoint para atualizar uma streaming existente")
     @ApiResponse (responseCode = "204", description = "Streaming deletada com sucesso",
             content = @Content(schema = @Schema(implementation = StreamingResponse.class)))
     @DeleteMapping("/{id}")
