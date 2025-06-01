@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Table;
@@ -29,7 +30,10 @@ public class StreamingController {
 
     private final StreamingService service;
 
-    @Operation (summary = "Buscar todas as streamings", description = "Endpoint para buscar todas as streamings cadastradas")
+    @Operation (summary = "Buscar todas as streamings", description = "Endpoint para buscar todas as streamings " +
+            "cadastradas",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse( responseCode = "200", description = "Lista de streamings retornada com sucesso",
     content =  @Content(array = @ArraySchema(schema = @Schema(implementation = StreamingResponse.class))))
     @GetMapping
@@ -41,7 +45,10 @@ public class StreamingController {
             return ResponseEntity.ok(streamingResponse);
     }
 
-    @Operation (summary = "Inserir uma nova streaming", description = "Endpoint para inserir uma nova streaming no sistema")
+    @Operation (summary = "Inserir uma nova streaming", description = "Endpoint para inserir uma nova streaming no " +
+            "sistema",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse(responseCode = "201", description = "Streaming inserida com sucesso",
             content = @Content(schema = @Schema(implementation = StreamingResponse.class)))
     @PostMapping
@@ -51,7 +58,10 @@ public class StreamingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(streaming);
     }
 
-    @Operation (summary = "Buscar streaming por ID", description = "Endpoint para buscar uma streaming específica pelo ID")
+    @Operation (summary = "Buscar streaming por ID", description = "Endpoint para buscar uma streaming específica " +
+            "pelo ID",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse(responseCode = "200", description = "Streaming encontrada com sucesso",
             content = @Content(schema = @Schema(implementation = StreamingResponse.class)))
     @ApiResponse (responseCode = "404", description = "Streaming não encontrada",
@@ -63,7 +73,9 @@ public class StreamingController {
                 .orElseThrow(() -> new EntityNotFoundException("Streaming não encontrado com o id: " + id));
     }
 
-    @Operation (summary = "Deletar uma streaming", description = "Endpoint para deletar uma streaming existente")
+    @Operation (summary = "Deletar uma streaming", description = "Endpoint para deletar uma streaming existente",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse (responseCode = "204", description = "Streaming deletada com sucesso",
             content = @Content(schema = @Schema(implementation = StreamingResponse.class)))
     @DeleteMapping("/{id}")

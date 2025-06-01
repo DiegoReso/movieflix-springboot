@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -32,7 +33,9 @@ public class CategoryController {
 
     private final CategoryService service;
 
-    @Operation (summary = "Buscar todas as categorias", description = "Endpoint para buscar todas as categorias cadastradas")
+    @Operation (summary = "Buscar todas as categorias", description = "Endpoint para buscar todas as categorias " +
+            "cadastradas",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso",
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class)))
     )
@@ -44,7 +47,10 @@ public class CategoryController {
         return ResponseEntity.ok(categoryResponseList);
     }
 
-    @Operation (summary = "Inserir uma nova categoria", description = "Endpoint para inserir uma nova categoria no sistema")
+    @Operation (summary = "Inserir uma nova categoria", description = "Endpoint para inserir uma nova categoria no " +
+            "sistema",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse(responseCode = "201", description = "Categoria inserido com sucesso",
             content = @Content(schema = @Schema(implementation = CategoryResponse.class))
     )
@@ -56,7 +62,10 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
     }
 
-    @Operation (summary = "Buscar categoria por ID", description = "Endpoint para buscar uma categoria específica pelo ID")
+    @Operation (summary = "Buscar categoria por ID", description = "Endpoint para buscar uma categoria específica " +
+            "pelo ID",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso",
             content = @Content(schema = @Schema(implementation = CategoryResponse.class))
     )
@@ -72,7 +81,10 @@ public class CategoryController {
 
     }
 
-    @Operation (summary = "Deletar categoria por ID", description = "Endpoint para deletar uma categoria específica pelo ID")
+    @Operation (summary = "Deletar categoria por ID", description = "Endpoint para deletar uma categoria específica " +
+            "pelo ID",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponse(responseCode = "204", description = "Categoria deletada com sucesso",
             content = @Content(schema = @Schema(type = "void"))
     )
