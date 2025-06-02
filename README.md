@@ -88,7 +88,7 @@ A API estará disponível em `http://localhost:8080`.
 Para uma melhor compreensão da estrutura e fluxo do sistema, observe o diagrama de arquitetura da MovieFlix API. Ele ilustra as principais camadas e a interação entre os componentes.
 
 
-<img src="/src/main/java/br/com/movieflix/assets/diagrama.png" alt="Diagrama da Arquitetura" width="70%">
+<img src="/src/main/java/br/com/movieflix/assets/diagram.png" alt="Diagrama da Arquitetura" width="70%">
 
 
 ---
