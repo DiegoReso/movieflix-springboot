@@ -40,8 +40,9 @@ Siga os passos abaixo para configurar e rodar a API localmente:
 ### 💾 Clone o Repositório:
 
 
-git clone https://github.com/seu-usuario/movieflix-api.git # Substitua pelo link do seu repositório
-cd movieflix-api
+* `git clone git@github.com:DiegoReso/movieflix-springboot.git`
+
+* cd movieflix-springboot
 
 
 ### ⚙️ Configuração do Banco de Dados:
