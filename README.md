@@ -40,8 +40,9 @@ Siga os passos abaixo para configurar e rodar a API localmente:
 ### 💾 Clone o Repositório:
 
 
-git clone https://github.com/seu-usuario/movieflix-api.git # Substitua pelo link do seu repositório
-cd movieflix-api
+* `git clone git@github.com:DiegoReso/movieflix-springboot.git`
+
+* cd movieflix-springboot
 
 
 ### ⚙️ Configuração do Banco de Dados:
@@ -88,7 +89,7 @@ A API estará disponível em `http://localhost:8080`.
 Para uma melhor compreensão da estrutura e fluxo do sistema, observe o diagrama de arquitetura da MovieFlix API. Ele ilustra as principais camadas e a interação entre os componentes.
 
 
-<img src="/src/main/java/br/com/movieflix/assets/diagrama.png" alt="Diagrama da Arquitetura" width="70%">
+<img src="/src/main/java/br/com/movieflix/assets/diagram.png" alt="Diagrama da Arquitetura" width="70%">
 
 
 ---
