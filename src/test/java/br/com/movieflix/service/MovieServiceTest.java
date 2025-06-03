@@ -95,4 +95,32 @@ class MovieServiceTest {
 
         assertEquals(0, movies.size());
     }
+
+    @Test
+    @DisplayName("Testa se o método insere um filme")
+    void shouldInsertMovie() {
+        Movie movie = new Movie(1L, "New Movie", "This is a new movie", LocalDate.now(), 9.0, LocalDateTime.now(),
+                LocalDateTime.now(), List.of(), List.of());
+
+        Mockito.when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
+        Movie savedMovie = movieService.insert(movie);
+
+        assertThat(savedMovie).isNotNull();
+        assertThat(savedMovie.getTitle()).isEqualTo("New Movie");
+        assertThat(savedMovie.getDescription()).isEqualTo("This is a new movie");
+    }
+
+    @Test
+    @DisplayName("Testa se o método nao insere um filme com título vazio")
+    void shouldNotInsertMovieWithEmptyTitle() {
+        Movie movie = new Movie(1L, "", "This is a new movie", LocalDate.now(), 9.0, LocalDateTime.now(),
+                LocalDateTime.now(), List.of(), List.of());
+
+        Mockito.when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
+
+        Movie savedMovie = movieService.insert(movie);
+
+        assertThat(savedMovie).isNotNull();
+        assertThat(savedMovie.getTitle()).isEmpty();
+    }
 }
