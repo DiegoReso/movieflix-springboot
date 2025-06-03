@@ -1,10 +1,12 @@
 package br.com.movieflix.service;
 
+import br.com.movieflix.entity.Category;
 import br.com.movieflix.entity.Movie;
 import br.com.movieflix.repository.MovieRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -12,11 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyList;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -66,13 +71,28 @@ class MovieServiceTest {
     }
 
     @Test
-    @DisplayName("Testa se o método retorna vazio quando não encontra o filme pelo ID")
-    void shouldReturnEmptyWhenMovieNotFoundById() {
-        Long movieId = 1L;
+    @DisplayName("Testa se o metodo retorna um filme por categoria")
+    void shouldReturnMoviesByCategory() {
+        Long categoryId = 1L;
+        Category category = new Category(categoryId, "Test Category");
+        Movie movie = new Movie(1L, "Test Movie", "This is a test movie", LocalDate.now(), 8.5, LocalDateTime.now(),
+                LocalDateTime.now(), List.of(category), null);
 
-        Mockito.when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
-        var foundMovie = movieService.findById(movieId);
-        assertEquals(Optional.empty(), foundMovie);
+        Mockito.when(movieRepository.findMovieByCategories(anyList())).thenReturn(List.of(movie));
+        List<Movie> movies = movieService.findByCategory(categoryId);
 
+        assertEquals(1, movies.size());
+        assertEquals(movie, movies.get(0));
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo retorna uma lista vazia quando não há filmes na categoria")
+    void shouldReturnEmptyListWhenNoMoviesInCategory() {
+        Long categoryId = 1L;
+
+        Mockito.when(movieRepository.findMovieByCategories(anyList())).thenReturn(Collections.emptyList());
+        List<Movie> movies = movieService.findByCategory(categoryId);
+
+        assertEquals(0, movies.size());
     }
 }
