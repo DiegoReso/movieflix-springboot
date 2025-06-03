@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,4 +51,28 @@ class MovieServiceTest {
         assertEquals(0, Movies.size());
     }
 
+
+    @Test
+    @DisplayName("Testa se o metodo retorna um filme pelo ID")
+    void shouldReturnMovieById() {
+        Long movieId = 1L;
+        Movie movie = new Movie(movieId, "Test Movie", "This is a test movie", LocalDate.now(), 8.5, LocalDateTime.now(),
+                LocalDateTime.now(), null, null);
+
+        Mockito.when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
+        var foundMovie = movieService.findById(movieId);
+
+        assertEquals(movie, foundMovie.get());
+    }
+
+    @Test
+    @DisplayName("Testa se o método retorna vazio quando não encontra o filme pelo ID")
+    void shouldReturnEmptyWhenMovieNotFoundById() {
+        Long movieId = 1L;
+
+        Mockito.when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
+        var foundMovie = movieService.findById(movieId);
+        assertEquals(Optional.empty(), foundMovie);
+
+    }
 }
