@@ -11,9 +11,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StreamingServiceTest {
@@ -55,21 +57,41 @@ class StreamingServiceTest {
     void insertStreaming() {
 
         Streaming streaming = new Streaming(1L, "Netfrix");
-        Mockito.when(streamingRepository.save(Mockito.any(Streaming.class))).thenReturn(streaming);
+        Mockito.when(streamingRepository.save(streaming)).thenReturn(streaming);
 
         Streaming streamingSaved = streamingService.insertStreaming(streaming);
 
-        assertThat(streamingSaved).isNotNull();
         assertThat(streamingSaved.getName()).isEqualTo("Netfrix");
 
+    }
+
+
+    @Test
+    @DisplayName("Testa se o metodo retorna Streaming por Id")
+    void shouldReturnStreamingById() {
+
+        Long streaminId = 1L;
+        Streaming streaming = new Streaming(streaminId, "Netfrix");
+
+        Mockito.when(streamingRepository.findById(streaminId)).thenReturn(Optional.of(streaming));
+
+        Optional<Streaming> foundStreaming = streamingService.findById(streaminId);
+
+        assertEquals(streaming, foundStreaming.get());
 
     }
 
     @Test
-    void findById() {
-    }
+    @DisplayName("Testa se a streaming sera deletada chamando o repository corretamente")
+    void shouldCallRepositoryDeleteByIdWhenDeleteStreaming() {
 
-    @Test
-    void delete() {
+        Long streamingIdToDelete = 1L;
+
+        doNothing().when(streamingRepository).deleteById(streamingIdToDelete);
+
+        streamingService.delete(streamingIdToDelete);
+
+        verify(streamingRepository, times(1)).deleteById(streamingIdToDelete);
+
     }
 }
