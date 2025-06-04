@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +51,18 @@ class StreamingServiceTest {
     }
 
     @Test
+    @DisplayName("Testa se o metodo insere uma streaming")
     void insertStreaming() {
+
+        Streaming streaming = new Streaming(1L, "Netfrix");
+        Mockito.when(streamingRepository.save(Mockito.any(Streaming.class))).thenReturn(streaming);
+
+        Streaming streamingSaved = streamingService.insertStreaming(streaming);
+
+        assertThat(streamingSaved).isNotNull();
+        assertThat(streamingSaved.getName()).isEqualTo("Netfrix");
+
+
     }
 
     @Test
