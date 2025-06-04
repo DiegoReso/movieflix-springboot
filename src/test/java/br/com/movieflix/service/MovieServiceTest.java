@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +41,7 @@ class MovieServiceTest {
         Movie movie = new Movie(1L, "Test Movie", "This is a test movie", LocalDate.now(), 8.5,LocalDateTime.now(),
                 LocalDateTime.now(), null, null);
 
-        Mockito.when(movieRepository.findAll()).thenReturn(Collections.singletonList(movie));
+        when(movieRepository.findAll()).thenReturn(Collections.singletonList(movie));
         List<Movie> Movies = movieService.findAll();
 
         assertEquals(1, Movies.size());
@@ -50,7 +51,7 @@ class MovieServiceTest {
     @DisplayName("Testa se o método retorna uma lista vazia quando não há filmes")
     void shouldReturnEmptyListWhenNoMovies() {
 
-        Mockito.when(movieRepository.findAll()).thenReturn(Collections.emptyList());
+        when(movieRepository.findAll()).thenReturn(Collections.emptyList());
         List<Movie> Movies = movieService.findAll();
 
         assertEquals(0, Movies.size());
@@ -64,7 +65,7 @@ class MovieServiceTest {
         Movie movie = new Movie(movieId, "Test Movie", "This is a test movie", LocalDate.now(), 8.5, LocalDateTime.now(),
                 LocalDateTime.now(), null, null);
 
-        Mockito.when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
+        when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
         var foundMovie = movieService.findById(movieId);
 
         assertEquals(movie, foundMovie.get());
@@ -78,7 +79,7 @@ class MovieServiceTest {
         Movie movie = new Movie(1L, "Test Movie", "This is a test movie", LocalDate.now(), 8.5, LocalDateTime.now(),
                 LocalDateTime.now(), List.of(category), null);
 
-        Mockito.when(movieRepository.findMovieByCategories(anyList())).thenReturn(List.of(movie));
+        when(movieRepository.findMovieByCategories(anyList())).thenReturn(List.of(movie));
         List<Movie> movies = movieService.findByCategory(categoryId);
 
         assertEquals(1, movies.size());
@@ -90,7 +91,7 @@ class MovieServiceTest {
     void shouldReturnEmptyListWhenNoMoviesInCategory() {
         Long categoryId = 1L;
 
-        Mockito.when(movieRepository.findMovieByCategories(anyList())).thenReturn(Collections.emptyList());
+        when(movieRepository.findMovieByCategories(anyList())).thenReturn(Collections.emptyList());
         List<Movie> movies = movieService.findByCategory(categoryId);
 
         assertEquals(0, movies.size());
@@ -102,7 +103,7 @@ class MovieServiceTest {
         Movie movie = new Movie(1L, "New Movie", "This is a new movie", LocalDate.now(), 9.0, LocalDateTime.now(),
                 LocalDateTime.now(), List.of(), List.of());
 
-        Mockito.when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
+        when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
         Movie savedMovie = movieService.insert(movie);
 
         assertThat(savedMovie).isNotNull();
@@ -116,11 +117,55 @@ class MovieServiceTest {
         Movie movie = new Movie(1L, "", "This is a new movie", LocalDate.now(), 9.0, LocalDateTime.now(),
                 LocalDateTime.now(), List.of(), List.of());
 
-        Mockito.when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
+        when(movieRepository.save(Mockito.any(Movie.class))).thenReturn(movie);
 
         Movie savedMovie = movieService.insert(movie);
 
         assertThat(savedMovie).isNotNull();
         assertThat(savedMovie.getTitle()).isEmpty();
     }
+
+    @Test
+    @DisplayName("Testa se o metodo deleta o filme por id")
+    void shouldDeleteMovieById(){
+        Long movieId = 1L;
+
+        Mockito.doNothing().when(movieRepository).deleteById(movieId);
+        movieService.delete(movieId);
+        verify(movieRepository, times(1)).deleteById(movieId);
+
+    }
+
+    @Test
+    @DisplayName("Testa se o metodo nao deleta o filme quando id nao for encontrado")
+    void shouldNotDeleteWhenIdNotFound(){
+        Long nonExistentMovieId = 99L;
+
+
+        verify(movieRepository, times(0)).deleteById(nonExistentMovieId);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
